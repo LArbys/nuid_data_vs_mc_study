@@ -1,37 +1,24 @@
 # UBImageNetTune
 
-This repository contains the files and scripts to train a neutrino+cosmic vs. cosmic-only model.
+This repository contains the files and scripts to train compare the neutrino ID network response for data and MC.
 
-Our strategy is to use transfer learning and fine-tune the first version of googlenet that has been pre-trained on the ImageNet dataset. We use the BVLC googlenet model.
+We trained a neutrino ID network by fine tuning GoogLeNet from ImageNet weights. We use the BVLC googlenet model.
 
-This code also serves as a tutorial to training network using images stored in our LArCV format and using our fork of Caffe. After training, we provide some scripts that demonstrate how to do some simple analyses with the network.
+Instructions on how this network was trained can be found on the following [wiki pages](https://github.com/LArbys/UBImageNetTune/wiki) that provide brief tutorials on the basics of training and an analysis with the network output.
 
-If you need a crash course in CNNs, take a look at this:
+## Goals
 
-[Standards CS231N: convolutional neural networks for visual recognition](http://cs231n.github.io/)
-[Syllabus for above](http://cs231n.stanford.edu/syllabus.html)
+* Compare the neutrino ID scores for EXT-BNB cosmic data and the equivalant EXT-BNB MC events. We want to compare the distribution of data versus MC.
+* Compare the mean activations are for data and MC at different layers in the network.  Start with the first and last layers.  Which layers strongly respond to MC or strongly respond to data
+* Study the activations of the network to overlay images (EXT-unbiased + MC BNB Neutrino) to those of BNB neutrino open data.  We have a CCQE enriched sample to study.  What layers go off for high/middle/low neutrino score events in data and MC.  Which are common, which are different?
+* This will help us prepare to try and train a neutrino ID network where the network is constrained to also reject cosmic MC images in various manners
 
-I recommend listening to their lectures, which were [here](http://cs231n.stanford.edu/syllabus.html). Videos of the lectures are gone now, but speak to me about how one might get a copy.
+## Files
 
-note: if you don't have your own GPU to work with, you can use the AWS. The price of the cheapest GPU instance (g2.2xlarge) is $0.65 an hour for on-demand usage (i.e. you get to run your job immediately, uninterupted).  But according to [this](http://markus.com/install-theano-on-aws/), the price might actually be much lower! That should be enough time to do some prototyping. More serious work will require your own setup, though.  The class above has a [tutorial](http://cs231n.github.io/aws-tutorial/) on how to setup an AWS account and spin an instance with GPU access and other software.  I haven't looked into how to get LArCV and our custom caffe onto it though.
-
-## Tutorial Instructions
-
-There are a couple of [wiki pages](https://github.com/LArbys/UBImageNetTune/wiki) that provide brief tutorials on the basics of training and an analysis with the network output.
-
-## Training (inside of a screen session)
-
-TL;DR
-
-    screen
-    source setup_env.sh
-    caffe train -solver rmsprop.solver -weights bvlc_googlenet.caffemodel >& log.txt
-
-To monitor the training process, ppen another screen terminal (or VNC)
-
-    python plot_training.py log.txt
-    tail -n 50 log.txt
-
-
-
-
+| File | purpose |
+| ---  | ------- |
+| bvlc_googlenet_test.prototxt | network description, in google prototxt format |
+| filler_testing.cfg | configuration file for ROOT-caffe interface |
+| analyze_test_data.py | example analysis script. for a new analysis, make a copy of this file. try not to overwrite it. |
+| setup_env.sh | bash script to setup shell environment.  Will setup the software you need (Caffe, LArCV, ROOT, cuda) | 
+| dump_images.py | providing a txt file with list of entries, will output those images if inside ROOT file | 

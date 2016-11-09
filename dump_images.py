@@ -6,8 +6,10 @@ from larcv import larcv
 import cv2
 import time
 
-# This is just a list of entry numbers from a 'net' tree that we wish to look at.
-eventfile = "eventlist_bnb_99_winpe100.txt"
+# This is text file where each line contains the entry number from a 'net' tree (output of analyse_test_data.py) that we wish to look at.
+eventfile = "my_event_lis.txt"
+
+# folder where the images will go
 outfolder = "images_bnb_99_winpe100"
 os.popen("mkdir -p %s"%(outfolder))
 os.popen("rm %s/*"%(outfolder))
@@ -27,10 +29,7 @@ with open(eventfile,'r') as f:
         if l.strip()!='' and int(l.strip()) not in eventlist:
             eventlist.append( int(l.strip()) )
 
-#eventlist = range(0,1)
-
 print "EVENTLIST: ",len(eventlist)
-
 
 # Setup the IOManager
 ioman = larcv.IOManager(larcv.IOManager.kREAD,"IOPLACEIN") # constructor
@@ -44,10 +43,6 @@ input_shape = (20, 3, 756, 856)
 
 print "[ENTER] to continue."
 raw_input()
-
-
-# setup output
-out = rt.TFile("output_maskanalysis.root", "RECREATE" )
 
 eventlist.sort()
 for entry in eventlist:
@@ -99,8 +94,8 @@ for entry in eventlist:
         pmt_img[:,:,img.meta().plane()]  = pmtnd[x1:x1+image_rows,y1:y1+image_cols]*100
 
 
-    cv2.imwrite( "%s/entry_%d.PNG"%(outfolder,entry), orig_img )
-    #cv2.imwrite( "%s/entry_%d_pmt.PNG"%(outfolder,entry), pmt_img )
+    # write the image using OpenCV 3
+    cv2.imwrite( "%s/entry_%d.png"%(outfolder,entry), orig_img )
 
     
     
