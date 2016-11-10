@@ -14,17 +14,18 @@ caffe.set_device(gpu_id)
 caffe.set_mode_gpu()
 
 prototxt = "bvlc_googlenet_test.prototxt"
-model = "snapshots_1a/snapshot_rmsprop_googlenet_iter_15000.caffemodel"
+model = "/mnt/raid0/taritree/v0/analysis_samples/snapshot_rmsprop_googlenet_iter_19020.caffemodel"
 pmtproducer = "pmt"
 tpcproducer = "tpc"
 out_tag = "valid"
 
 # v0 data files
 # REMEMBER: this file list must match the one in filler_test.cfg -- we are trying to get model scores and also calcualte PMT values that are of the correct entry
-rootfiles = ["/mnt/raid0/taritree/v0/training_sample/validation_sample_extbnb_v0.root",
-             "/mnt/raid0/taritree/v0/training_sample/validation_sample_overlay_v0.root"]
-#rootfiles = ["bnb_xiao_scaled.root"]
-#rootfiles = ["extbnb_scaled.root"]
+rootfiles = ["/mnt/raid0/taritree/v0/training_sample/validation_sample_extbnb_v0.root",  
+             "/mnt/raid0/taritree/v0/training_sample/validation_sample_overlay_v0.root"] # validation cosmic data, validation cosmic data + BNB neutrino MC
+#rootfiles = ["/mnt/raid0/taritree/v0/analysis_samples/bnb_xiao_scaled.root"] # data neutrino-enriched sample
+#rootfiles = ["/mnt/raid0/taritree/v0/analysis_samples/extbnb_scaled.root"] # data cosmic
+#rootfiles = ["/mnt/raid0/taritree/v0/analysis_samples/mcc7_cosmic_extbnb_detsim_to_larcv_adc_scale_v00_p00.root"] # MC cosmic
 
 net = caffe.Net( prototxt, model, caffe.TEST )
 input_shape = net.blobs["data"].data.shape
